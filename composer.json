@@ -1,11 +1,11 @@
 {
-    "name": "smhg/sepa-qr-data",
+    "name": "mjohndus/sepa-qr-data",
     "description": "Generate QR code data for SEPA payments",
     "license": "MIT",
     "authors": [
         {
-            "name": "smhg",
-            "email": "sam.hauglustaine@gmail.com"
+            "name": "mjohndus",
+            "email": "m.john@fn.de"
         }
     ],
     "require": {
@@ -23,7 +23,7 @@
     "repositories": [
     {
         "type": "vcs",
-        "url": "https://github.com/mjohndus/sepa-qr-data.git"
+        "url": "https://github.com/mjohndus/sepa-qr-data-php.git"
     }
     ],
     "require-dev": {
