@@ -12,6 +12,14 @@ class Data
     const ISO8859_10 = 7;
     const ISO8859_15 = 8;
 
+    private $valt = ['ALL','AFN','ARS','AWG','AUD','AZN','BSD','BBD','BDT','BYR','BZD','BMD','BOB','BAM','BWP','BGN','BRL',
+                     'BND','KHR','CAD','KYD','CLP','CNY','COP','CRC','HRK','CUP','CZK','DKK','DOP','XCD','EGP','SVC','EEK',
+                     'EUR','FKP','FJD','GHC','GIP','GTQ','GGP','GYD','HNL','HKD','HUF','ISK','INR','IDR','IRR','IMP','ILS',
+                     'JMD','JPY','JEP','KZT','KPW','KRW','KGS','LAK','LVL','LBP','LRD','LTL','MKD','MYR','MUR','MXN','MNT',
+                     'MZN','NAD','NPR','ANG','NZD','NIO','NGN','NOK','OMR','PKR','PAB','PYG','PEN','PHP','PLN','QAR','RON',
+                     'RUB','SHP','SAR','RSD','SCR','SGD','SBD','SOS','ZAR','LKR','SEK','CHF','SRD','SYP','TWD','THB','TTD',
+                     'TRY','TRL','TVD','UAH','GBP','USD','UYU','UZS','VEF','VND','YER','ZWD'];
+
     private $sepaValues = array(
         'serviceTag' => 'BCD',
         'version' => 2,
@@ -78,15 +86,19 @@ class Data
 
     public function setBic($bic)
     {
-        if (strlen($bic) < 8) {
-            throw new Exception('BIC of the beneficiary bank cannot be shorter than 8 characters');
-        }
+        if (strlen($bic) > 0) {
 
-        if (strlen($bic) > 11) {
-            throw new Exception('BIC of the beneficiary bank cannot be longer than 11 characters');
+            if (strlen($bic) < 8) {
+                throw new Exception('BIC of the beneficiary bank cannot be shorter than 8 characters');
+            }
+
+            if (strlen($bic) > 11) {
+                throw new Exception('BIC of the beneficiary bank cannot be longer than 11 characters');
+            }
         }
 
         $this->sepaValues['bic'] = $bic;
+
         return $this;
     }
 
@@ -114,37 +126,71 @@ class Data
 
     public function setCurrency($currency)
     {
-        if (strlen($currency) !== 3) {
-            throw new Exception('Currency of the credit transfer can only be a valid ISO 4217 code');
+        if (strlen($currency) > 0) {
+
+            if (strlen($currency) !== 3) {
+                throw new Exception('Currency of the credit transfer can only be a valid ISO 4217 code');
+            }
+
+            if (!in_array($currency, $this->valt)) {
+                throw new Exception('The currency is not supported or no valid ISO 4217 code');
+            }
+
+            $this->sepaValues['currency'] = $currency;
+
+            return $this;
         }
 
-        $this->sepaValues['currency'] = $currency;
+        $this->sepaValues['currency'] = 'EUR';
 
         return $this;
     }
 
     public function setAmount($amount)
     {
-        if ($amount < 0.01) {
-            throw new Exception('Amount of the credit transfer cannot be smaller than 0.01 Euro');
+        if ($amount > 0.00) {
+
+            //if (($ramount = preg_replace("/^[0-9]+(\.[0-9]{0,5}|\,[0-9]{0,5})?$/", '', $amount) !== '')) {
+            if (($ramount = preg_replace("/^[0-9]+(\.[0-9]{0,5})?$/", '', $amount) !== '')) {
+                throw new Exception('Amount of the credit transfer must be type of float');
+            }
+
+            if ($amount < 0.01) {
+                throw new Exception('Amount of the credit transfer cannot be smaller than 0.01 Euro');
+            }
+
+            if ($amount > 999999999.99) {
+                throw new Exception('Amount of the credit transfer cannot be higher than 999999999.99 Euro');
+            }
+
+            $this->sepaValues['amount'] = (float)$amount;
+
+            return $this;
         }
 
-        if ($amount > 999999999.99) {
-            throw new Exception('Amount of the credit transfer cannot be higher than 999999999.99 Euro');
-        }
-
-        $this->sepaValues['amount'] = (float)$amount;
+        $this->sepaValues['amount'] = 0;
 
         return $this;
     }
 
     public function setPurpose($purpose)
     {
-        if (strlen($purpose) !== 4) {
-            throw new Exception('Purpose code can only be 4 characters');
+        if (strlen($purpose) > 0) {
+
+            if (strlen($purpose) !== 4) {
+                throw new Exception('Purpose code can only be 4 characters');
+            }
+
+            if (($rpose = preg_replace("/[A-Z]{4}/", '', $purpose)) !== '') {
+                throw new Exception('Only capital letters are allowed');
+            }
+
+            $this->sepaValues['purpose'] = $purpose;
+
+            return $this;
         }
 
-        $this->sepaValues['purpose'] = $purpose;
+        $this->sepaValues['purpose'] = '';
 
         return $this;
     }
