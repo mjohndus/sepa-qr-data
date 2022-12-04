@@ -20,6 +20,12 @@
         "test": "phpunit",
         "lint": "phpmd src,tests ansi phpmd.xml"
     },
+    "repositories": [
+    {
+        "type": "vcs",
+        "url": "https://github.com/mjohndus/sepa-qr-data.git"
+    }
+    ],
     "require-dev": {
         "phpmd/phpmd": "^2.8",
         "phpunit/phpunit": "^7||^9"
