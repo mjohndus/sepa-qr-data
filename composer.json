@@ -9,7 +9,8 @@
         }
     ],
     "require": {
-        "php": "^7.1||^8"
+        "php": "^7.1||^8",
+        "endroid/qr-code": "^4.0"
     },
     "autoload": {
         "psr-4": {
@@ -20,12 +21,6 @@
         "test": "phpunit",
         "lint": "phpmd src,tests ansi phpmd.xml"
     },
-    "repositories": [
-    {
-        "type": "vcs",
-        "url": "https://github.com/mjohndus/sepa-qr-data-php.git"
-    }
-    ],
     "require-dev": {
         "phpmd/phpmd": "^2.8",
         "phpunit/phpunit": "^7||^9"
