@@ -5,6 +5,9 @@ use PHPUnit\Framework\TestCase;
 use SepaQr\Data;
 use SepaQr\Exception;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class DataTest extends TestCase
 {
     /**
@@ -44,9 +47,21 @@ class DataTest extends TestCase
 
         $this->expectException(\TypeError::class);
 
-        $sepaQrData->setCharacterSet('UTF8');
+        $sepaQrData->setCharacterSet('UTF8'); // @phpstan-ignore-line
     }
 
+    public function testSetBic(): void
+    {
+        $sepaQrData = new Data();
+
+        $sepaQrData->setBic('ABCDEFGH'); // 8 characters
+        $sepaQrData->setBic('ABCDEFGHIJK'); // 11 characters
+
+        $this->expectException(Exception::class);
+
+        $sepaQrData->setBic('ABCDEFGHI'); // 9 characters
+    }
+    
     public function testSetCurrency(): void
     {
         $sepaQrData = new Data();
@@ -143,9 +158,10 @@ EOF;
 
     public function testSetVersionExceptionCase2(): void
     {
+        $sepaQrData = new Data();
+
         $this->expectException(\TypeError::class);
 
-        $sepaQrData = new Data();
-        $sepaQrData->setVersion('v1');
+        $sepaQrData->setVersion('v1'); // @phpstan-ignore-line
     }
 }
