@@ -12,6 +12,10 @@ class Data
     const ISO8859_10 = 7;
     const ISO8859_15 = 8;
 
+    /**
+     * @var array<string, int|float|string>
+     */
+    
     private $valt = ['ALL','AFN','ARS','AWG','AUD','AZN','BSD','BBD','BDT','BYR','BZD','BMD','BOB','BAM','BWP','BGN','BRL',
                      'BND','KHR','CAD','KYD','CLP','CNY','COP','CRC','HRK','CUP','CZK','DKK','DOP','XCD','EGP','SVC','EEK',
                      'EUR','FKP','FJD','GHC','GIP','GTQ','GGP','GYD','HNL','HKD','HUF','ISK','INR','IDR','IRR','IMP','ILS',
@@ -27,7 +31,8 @@ class Data
         'identification' => 'SCT'
     );
 
-    public static function formatMoney($currency = 'EUR', $value = 0) {
+    public static function formatMoney(string $currency = 'EUR', float $value = 0): string
+    {
         return sprintf(
             '%s%s',
             strtoupper($currency),
@@ -35,12 +40,12 @@ class Data
         );
     }
 
-    public static function create()
+    public static function create(): Data
     {
         return new self();
     }
 
-    public function setServiceTag(string $serviceTag = 'BCD')
+    public function setServiceTag(string $serviceTag = 'BCD'): static
     {
         if ($serviceTag !== 'BCD') {
             throw new Exception('Invalid service tag');
@@ -51,7 +56,7 @@ class Data
         return $this;
     }
 
-    public function setVersion(int $version = 2)
+    public function setVersion(int $version = 2): static
     {
         if (!in_array($version, range(1, 2))) {
             throw new Exception('Invalid version');
@@ -62,7 +67,7 @@ class Data
         return $this;
     }
 
-    public function setCharacterSet(int $characterSet = self::UTF_8)
+    public function setCharacterSet(int $characterSet = self::UTF_8): static
     {
         if (!in_array($characterSet, range(1, 8))) {
             throw new Exception('Invalid character set');
@@ -73,7 +78,7 @@ class Data
         return $this;
     }
 
-    public function setIdentification($identification = 'SCT')
+    public function setIdentification(string $identification = 'SCT'): static
     {
         if ($identification !== 'SCT') {
             throw new Exception('Invalid identification code');
@@ -84,7 +89,7 @@ class Data
         return $this;
     }
 
-    public function setBic($bic)
+    public function setBic(string $bic): static
     {
         if (strlen($bic) > 0) {
 
@@ -94,6 +99,8 @@ class Data
 
             if (strlen($bic) > 11) {
                 throw new Exception('BIC of the beneficiary bank cannot be longer than 11 characters');
+            //if (strlen($bic) !== 8 && strlen($bic) !== 11) {
+            //    throw new Exception('BIC of the beneficiary can only be 8 or 11 characters');
             }
         }
 
@@ -102,7 +109,7 @@ class Data
         return $this;
     }
 
-    public function setName($name)
+    public function setName(string $name): static
     {
         if (strlen($name) > 70) {
             throw new Exception('Name of the beneficiary cannot be longer than 70 characters');
@@ -113,7 +120,7 @@ class Data
         return $this;
     }
 
-    public function setIban($iban)
+    public function setIban(string $iban): static
     {
         if (strlen($iban) > 34) {
             throw new Exception('Account number of the beneficiary cannot be longer than 34 characters');
@@ -124,7 +131,7 @@ class Data
         return $this;
     }
 
-    public function setCurrency($currency)
+    public function setCurrency(string $currency): static
     {
         if (strlen($currency) > 0) {
 
@@ -146,7 +153,7 @@ class Data
         return $this;
     }
 
-    public function setAmount($amount)
+    public function setAmount(float $amount): static
     {
         if ($amount > 0.00) {
 
@@ -163,7 +170,7 @@ class Data
                 throw new Exception('Amount of the credit transfer cannot be higher than 999999999.99 Euro');
             }
 
-            $this->sepaValues['amount'] = (float)$amount;
+            $this->sepaValues['amount'] = $amount;
 
             return $this;
         }
@@ -173,7 +180,7 @@ class Data
         return $this;
     }
 
-    public function setPurpose($purpose)
+    public function setPurpose(string $purpose): static
     {
         if (strlen($purpose) > 0) {
 
@@ -195,7 +202,7 @@ class Data
         return $this;
     }
 
-    public function setRemittanceReference($remittanceReference)
+    public function setRemittanceReference(string $remittanceReference): static
     {
         if (strlen($remittanceReference) > 35) {
             throw new Exception('Structured remittance information cannot be longer than 35 characters');
@@ -210,7 +217,7 @@ class Data
         return $this;
     }
 
-    public function setRemittanceText($remittanceText)
+    public function setRemittanceText(string $remittanceText): static
     {
         if (strlen($remittanceText) > 140) {
             throw new Exception('Unstructured remittance information cannot be longer than 140 characters');
@@ -225,7 +232,7 @@ class Data
         return $this;
     }
 
-    public function setInformation($information)
+    public function setInformation(string $information): static
     {
         if (strlen($information) > 70) {
             throw new Exception('Beneficiary to originator information cannot be longer than 70 characters');
