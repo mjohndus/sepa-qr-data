@@ -93,14 +93,8 @@ class Data
     {
         if (strlen($bic) > 0) {
 
-            if (strlen($bic) < 8) {
-                throw new Exception('BIC of the beneficiary bank cannot be shorter than 8 characters');
-            }
-
-            if (strlen($bic) > 11) {
-                throw new Exception('BIC of the beneficiary bank cannot be longer than 11 characters');
-            //if (strlen($bic) !== 8 && strlen($bic) !== 11) {
-            //    throw new Exception('BIC of the beneficiary can only be 8 or 11 characters');
+            if (strlen($bic) !== 8 && strlen($bic) !== 11) {
+                throw new Exception('BIC of the beneficiary can only be 8 or 11 characters');
             }
         }
 
