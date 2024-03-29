@@ -11,7 +11,7 @@ class Data
     const ISO8859_7 = 6;
     const ISO8859_10 = 7;
     const ISO8859_15 = 8;
-    
+
     private $valt = ['ALL','AFN','ARS','AWG','AUD','AZN','BSD','BBD','BDT','BYR','BZD','BMD','BOB','BAM','BWP','BGN','BRL',
                      'BND','KHR','CAD','KYD','CLP','CNY','COP','CRC','HRK','CUP','CZK','DKK','DOP','XCD','EGP','SVC','EEK',
                      'EUR','FKP','FJD','GHC','GIP','GTQ','GGP','GYD','HNL','HKD','HUF','ISK','INR','IDR','IRR','IMP','ILS',
@@ -22,7 +22,7 @@ class Data
 
     /**
      * @var array<string, int|float|string>
-     */ 
+     */
     private $sepaValues = array(
         'serviceTag' => 'BCD',
         'version' => 2,
