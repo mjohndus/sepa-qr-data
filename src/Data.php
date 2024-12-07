@@ -30,7 +30,7 @@ class Data
         'identification' => 'SCT'
     );
 
-    public static function formatMoney(string $currency = 'EUR', float $value = 0): string
+    public static function formatMoney(string $currency = 'EUR', string $value = ''): string
     {
         return sprintf(
             '%s%s',
@@ -146,7 +146,7 @@ class Data
         return $this;
     }
 
-    public function setAmount(float $amount): static
+    public function setAmount(string $amount): static
     {
         if ($amount > 0.00) {
 
@@ -168,7 +168,7 @@ class Data
             return $this;
         }
 
-        $this->sepaValues['amount'] = 0;
+        $this->sepaValues['amount'] = '';
 
         return $this;
     }
@@ -243,7 +243,7 @@ class Data
             'name' => '',
             'iban' => '',
             'currency' => 'EUR',
-            'amount' => 0,
+            'amount' => '',
             'purpose' => '',
             'remittanceReference' => '',
             'remittanceText' => '',
@@ -272,7 +272,7 @@ class Data
             $values['bic'],
             $values['name'],
             $values['iban'],
-            self::formatMoney((string)$values['currency'], (float)$values['amount']),
+            self::formatMoney((string)$values['currency'], (string)$values['amount']),
             $values['purpose'],
             $values['remittanceReference'],
             $values['remittanceText'],
