@@ -35,11 +35,11 @@ class Data
         return sprintf(
             '%s%s',
             strtoupper($currency),
-            $value > 0 ? number_format($value, 2, '.','') : ''
+            $value > 0 ? number_format($value, 2, '.', '') : ''
         );
     }
 
-    public static function create(): Data
+    public static function build(): Data
     {
         return new self();
     }
@@ -148,6 +148,8 @@ class Data
 
     public function setAmount(string $amount): static
     {
+        $amount = floatval($amount);
+        
         if (floatval($amount) > 0.00) {
 
             //if (($ramount = preg_replace("/^[0-9]+(\.[0-9]{0,5}|\,[0-9]{0,5})?$/", '', $amount) !== '')) {
@@ -163,7 +165,7 @@ class Data
                 throw new Exception('Amount of the credit transfer cannot be higher than 999999999.99 Euro');
             }
 
-            $this->sepaValues['amount'] = floatval($amount);
+            $this->sepaValues['amount'] = number_format($amount, 2, '.', '');
 
             return $this;
         }
