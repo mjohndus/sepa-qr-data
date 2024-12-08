@@ -35,7 +35,7 @@ class DataTest extends TestCase
     {
         $this->assertInstanceOf(
             Data::class,
-            Data::create()
+            Data::build()
         );
     }
 
