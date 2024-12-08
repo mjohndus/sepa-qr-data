@@ -32,15 +32,18 @@ composer require endroid/qr-code
 #### Usage
 ```php
 use Endroid\QrCode\Builder\Builder;
-use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelMedium;
+use Endroid\QrCode\ErrorCorrectionLevel;
 ```
 
 ```php
-Builder::create()
-    ->data($paymentData)
-    ->errorCorrectionLevel(new ErrorCorrectionLevelMedium()) // required by EPC standard
-    ->build()
-    ->saveToFile('payment.png');
+$builder = new Builder(
+    writer: new PngWriter(),
+    data: $paymentData,
+    errorCorrectionLevel: ErrorCorrectionLevel::High  // required by EPC standard
+);
+
+$result = $builder->build();
+$result->saveToFile('payment.png');
 ```
 **Note:** endroid/qr-code lists [more ways](https://github.com/endroid/qr-code#usage-working-with-results) to render.
 
@@ -132,9 +135,16 @@ composer require smhg/sepa-qr-data endroid/qr-code
 $paymentData = Data::build();
 // ->set...
 
-Builder::create()
-    ->errorCorrectionLevel(new ErrorCorrectionLevelMedium())
-    ->data($paymentData)
-    ->build()
-    ->saveToFile('payment.png');
+$builder = new Builder(
+    writer: new PngWriter(),
+    ...
+    ...
+    data: $paymentData,
+    errorCorrectionLevel: ErrorCorrectionLevel::High,  // required by EPC standard
+);
+
+$result = $builder->build();
+$result->saveToFile('payment.png');
+$img = $result->getString();
+$img = $result->getDataUri();
 ```
