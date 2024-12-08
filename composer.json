@@ -1,5 +1,5 @@
 {
-    "name": "smhg/sepa-qr-data",
+    "name": "mjohndus/sepa-qr-data",
     "description": "Generate QR code data for SEPA payments",
     "license": "MIT",
     "authors": [
