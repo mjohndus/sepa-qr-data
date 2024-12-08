@@ -16,7 +16,7 @@ use SepaQr\Data;
 ```
 
 ```php
-$paymentData = Data::create()
+$paymentData = Data::build()
   ->setName('Name of the beneficiary')
   ->setIban('BE123456789123456789')
   ->setAmount(100); // The amount in Euro
@@ -129,7 +129,7 @@ composer require smhg/sepa-qr-data endroid/qr-code
 
 **4. Adapt QR code generation accordingly**
 ```php
-$paymentData = Data::create();
+$paymentData = Data::build();
 // ->set...
 
 Builder::create()
