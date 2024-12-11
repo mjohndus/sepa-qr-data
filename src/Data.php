@@ -205,7 +205,7 @@ class Data
                 throw new Exception('Structured remittance information cannot be longer than 35 characters');
             }
 
-            if (isset($this->sepaValues['remittanceText'])) {
+            if (isset($this->sepaValues['remittanceText']) AND strlen($this->sepaValues['remittanceText']) > 0) {
                 throw new Exception('Use either structured or unstructured remittance information');
             }
 
@@ -227,7 +227,7 @@ class Data
                 throw new Exception('Unstructured remittance information cannot be longer than 140 characters');
             }
 
-            if (isset($this->sepaValues['remittanceReference'])) {
+            if (isset($this->sepaValues['remittanceReference']) AND strlen($this->sepaValues['remittanceReference']) > 0) {
                 throw new Exception('Use either structured or unstructured remittance information');
             }
 
