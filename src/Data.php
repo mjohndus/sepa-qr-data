@@ -184,7 +184,7 @@ class Data
             }
 
             if (($rpose = preg_replace("/[A-Z]{4}/", '', $purpose)) !== '') {
-                throw new Exception('Only capital letters are allowed');
+                throw new Exception('Only 4 capital letters (A-Z) are allowed');
             }
 
             $this->sepaValues['purpose'] = $purpose;
@@ -209,6 +209,10 @@ class Data
                 throw new Exception('Use either structured or unstructured remittance information');
             }
 
+            if (($rReference = preg_replace("/[0-9a-zA-Z ':,.?-\\\+\\\(\\\)\\/]/", '', $remittanceReference)) !== '') {
+                throw new Exception('Only capital letters (A-Za-z), Numbers (0-9) and special characters (/?:\'().,+-space) are allowed');
+            }
+            
             $this->sepaValues['remittanceReference'] = $remittanceReference;
 
             return $this;
