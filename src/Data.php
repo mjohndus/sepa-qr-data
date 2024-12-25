@@ -149,7 +149,7 @@ class Data
     public function setAmount(string $amount): static
     {
         $amount = floatval($amount);
-        
+
         if (floatval($amount) > 0.00) {
 
             //if (($ramount = preg_replace("/^[0-9]+(\.[0-9]{0,5}|\,[0-9]{0,5})?$/", '', $amount) !== '')) {
@@ -212,7 +212,7 @@ class Data
             if (($rReference = preg_replace("/[0-9a-zA-Z ':,.?-\\\+\\\(\\\)\\/]/", '', $remittanceReference)) !== '') {
                 throw new Exception('Only capital letters (A-Za-z), Numbers (0-9) and special characters (/?:\'().,+-space) are allowed');
             }
-            
+
             $this->sepaValues['remittanceReference'] = $remittanceReference;
 
             return $this;
