@@ -1,5 +1,9 @@
-<?php
+<?php declare(strict_types=1);
+
 namespace SepaQr;
+
+use InvalidArgumentException;
+use LogicException;
 
 class Data
 {
@@ -30,8 +34,11 @@ class Data
         'identification' => 'SCT'
     );
 
-    public static function formatMoney(string $currency = 'EUR', float $value = 0): string
+    protected function formatMoney(float $value = 0): string
     {
+        /** @var string */
+        $currency = $this->sepaValues['currency'] ?? 'EUR';
+        
         return sprintf(
             '%s%s',
             strtoupper($currency),
