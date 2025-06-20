@@ -2,8 +2,8 @@
 
 namespace SepaQr;
 
-use InvalidArgumentException;
-use LogicException;
+// use InvalidArgumentException;
+// use LogicException;
 
 class Data
 {
