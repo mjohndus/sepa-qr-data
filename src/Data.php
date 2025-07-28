@@ -300,6 +300,9 @@ class Data
             throw new Exception('Missing account number of the beneficiary');
         }
 
+        /** @var float */
+        $amount = $values['amount'];
+        
         return rtrim(implode("\n", array(
             $values['serviceTag'],
             sprintf('%03d', $values['version']),
