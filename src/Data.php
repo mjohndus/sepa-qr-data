@@ -34,10 +34,11 @@ class Data
         'identification' => 'SCT'
     );
 
-    protected function formatMoney(float $value = 0): string
+    public static function formatMoney(string $currency = 'EUR', string $value = ''): string
+    //protected function formatMoney(float $value = 0): string
     {
         /** @var string */
-        $currency = $this->sepaValues['currency'] ?? 'EUR';
+        //$currency = $this->sepaValues['currency'] ?? 'EUR';
         
         return sprintf(
             '%s%s',
@@ -160,7 +161,7 @@ class Data
         if (floatval($amount) > 0.00) {
 
             //if (($ramount = preg_replace("/^[0-9]+(\.[0-9]{0,5}|\,[0-9]{0,5})?$/", '', $amount) !== '')) {
-            if (($ramount = preg_replace("/^[0-9]+(\.[0-9]{0,5})?$/", '', $amount) !== '')) {
+            if (($ramount = preg_replace("/^[0-9]+(\.[0-9]{0,5})?$/", '', strval($amount)) !== '')) {
                 throw new Exception('Amount of the credit transfer must be type of float');
             }
 
@@ -312,6 +313,7 @@ class Data
             $values['name'],
             $values['iban'],
             self::formatMoney((string)$values['currency'], (float)$values['amount']),
+            //self::formatMoney($amount),
             $values['purpose'],
             $values['remittanceReference'],
             $values['remittanceText'],
