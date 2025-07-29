@@ -46,6 +46,11 @@ class SepaQrData
         );
     }
 
+    public static function build(): Data
+    {
+        return new self();
+    }
+    
     public function setServiceTag(string $serviceTag = 'BCD'): static
     {
         if ($serviceTag !== 'BCD') {
