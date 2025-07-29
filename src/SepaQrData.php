@@ -23,7 +23,7 @@ class SepaQrData
                      'MZN','NAD','NPR','ANG','NZD','NIO','NGN','NOK','OMR','PKR','PAB','PYG','PEN','PHP','PLN','QAR','RON',
                      'RUB','SHP','SAR','RSD','SCR','SGD','SBD','SOS','ZAR','LKR','SEK','CHF','SRD','SYP','TWD','THB','TTD',
                      'TRY','TRL','TVD','UAH','GBP','USD','UYU','UZS','VEF','VND','YER','ZWD'];
-    
+
     /**
      * @var array<string, int|float|string>
      */
@@ -50,7 +50,7 @@ class SepaQrData
     {
         return new self();
     }
-    
+
     public function setServiceTag(string $serviceTag = 'BCD'): static
     {
         if ($serviceTag !== 'BCD') {
@@ -98,11 +98,11 @@ class SepaQrData
     public function setBic(string $bic): static
     {
         if (strlen($bic) > 0) {
-        
+
             if (strlen($bic) !== 8 && strlen($bic) !== 11) {
                 throw new InvalidArgumentException("Invalid BIC of the beneficiary: $bic. Should be either 8 or 11 characters.");
             }
-        }            
+        }
 
         $this->sepaValues['bic'] = $bic;
 
@@ -134,7 +134,7 @@ class SepaQrData
     public function setCurrency(string $currency): static
     {
         if (strlen($currency) > 0) {
-        
+
             if (strlen($currency) !== 3) {
                 throw new InvalidArgumentException("Invalid currency: $currency. Should be a valid 3 character ISO 4217 code.");
             }
@@ -150,7 +150,7 @@ class SepaQrData
 
         $this->sepaValues['currency'] = 'EUR';
 
-        return $this;        
+        return $this;
     }
 
     public function setAmount(float $amount): static
@@ -177,7 +177,7 @@ class SepaQrData
 
             return $this;
         }
-        
+
         $this->sepaValues['amount'] = '';
 
         return $this;
@@ -186,7 +186,7 @@ class SepaQrData
     public function setPurpose(string $purpose): static
     {
         if (strlen($purpose) > 0) {
-        
+
             if (strlen($purpose) !== 4) {
                 throw new InvalidArgumentException("Invalid purpose code: $purpose. Should be 4 characters.");
             }
@@ -194,7 +194,7 @@ class SepaQrData
             if (($rpose = preg_replace("/[A-Z]{4}/", '', $purpose)) !== '') {
                 throw new InvalidArgumentException('Only 4 capital letters (A-Z) are allowed');
             }
-            
+
             $this->sepaValues['purpose'] = $purpose;
 
             return $this;
@@ -208,7 +208,7 @@ class SepaQrData
     public function setRemittanceReference(string $remittanceReference): static
     {
         if (strlen($remittanceReference) > 0) {
-        
+
             if (strlen($remittanceReference) > 35) {
                 throw new InvalidArgumentException("Invalid structured remittance information: $remittanceReference. Should be maximum 35 characters.");
             }
@@ -220,7 +220,7 @@ class SepaQrData
             if (($rReference = preg_replace("/[0-9a-zA-Z ':,.?-\\\+\\\(\\\)\\/]/", '', $remittanceReference)) !== '') {
                 throw new InvalidArgumentException('Only capital letters (A-Za-z), Numbers (0-9) and special characters (/?:\'().,+-space) are allowed');
             }
-            
+
             $this->sepaValues['remittanceReference'] = (string)$remittanceReference;
 
             return $this;
@@ -234,7 +234,7 @@ class SepaQrData
     public function setRemittanceText(string $remittanceText): static
     {
         if (strlen($remittanceText) > 0) {
-        
+
             if (strlen($remittanceText) > 140) {
                 throw new InvalidArgumentException("Invalid unstructured remittance information: $remittanceText. Should be maximum 140 characters.");
             }
@@ -256,7 +256,7 @@ class SepaQrData
     public function setInformation(string $information): static
     {
         if (strlen($information) > 0) {
-        
+
             if (strlen($information) > 70) {
                 throw new InvalidArgumentException("Invalid beneficiary to originator information: $information. Should be maximum 70 characters.");
             }
