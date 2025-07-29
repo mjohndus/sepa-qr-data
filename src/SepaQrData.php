@@ -46,7 +46,7 @@ class SepaQrData
         );
     }
 
-    public static function build(): Data
+    public static function build(): SepaQrData
     {
         return new self();
     }
@@ -155,9 +155,7 @@ class SepaQrData
 
     public function setAmount(float $amount): static
     {
-        //$amount = floatval($amount);
-
-        if (floatval($amount) > 0.00) {
+        if ($amount > 0.00) {
 
             //if (($ramount = preg_replace("/^[0-9]+(\.[0-9]{0,5}|\,[0-9]{0,5})?$/", '', $amount) !== '')) {
             if (($ramount = preg_replace("/^[0-9]+(\.[0-9]{0,5})?$/", '', strval($amount)) !== '')) {
@@ -173,7 +171,6 @@ class SepaQrData
             }
 
             $this->sepaValues['amount'] = number_format($amount, 2, '.', '');
-            //$this->sepaValues['amount'] = $amount;
 
             return $this;
         }
@@ -311,7 +308,6 @@ class SepaQrData
             $values['name'],
             $values['iban'],
             self::formatMoney($amount),
-            //self::formatMoney((string)$values['currency'], (float)$values['amount']),
             $values['purpose'],
             $values['remittanceReference'],
             $values['remittanceText'],
