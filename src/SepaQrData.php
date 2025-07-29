@@ -161,7 +161,7 @@ class SepaQrData
             if (($ramount = preg_replace("/^[0-9]+(\.[0-9]{0,5})?$/", '', strval($amount)) !== '')) {
                 throw new InvalidArgumentException('Amount of the credit transfer must be type of float');
             }
-        
+
             if ($amount < 0.01) {
                 throw new InvalidArgumentException("Invalid amount: $amount. Should be minumum 0.01 Euro.");
             }
@@ -265,7 +265,7 @@ class SepaQrData
 
         $this->sepaValues['information'] = '';
 
-        return $this;       
+        return $this;
     }
 
     public function __toString(): string
@@ -307,7 +307,7 @@ class SepaQrData
             $values['bic'],
             $values['name'],
             $values['iban'],
-            self::formatMoney($amount),
+            self::formatMoney(floatval($amount)),
             $values['purpose'],
             $values['remittanceReference'],
             $values['remittanceText'],
