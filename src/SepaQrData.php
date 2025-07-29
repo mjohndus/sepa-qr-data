@@ -16,6 +16,14 @@ class SepaQrData
     const ISO8859_10 = 7;
     const ISO8859_15 = 8;
 
+    private $valt = ['ALL','AFN','ARS','AWG','AUD','AZN','BSD','BBD','BDT','BYR','BZD','BMD','BOB','BAM','BWP','BGN','BRL',
+                     'BND','KHR','CAD','KYD','CLP','CNY','COP','CRC','HRK','CUP','CZK','DKK','DOP','XCD','EGP','SVC','EEK',
+                     'EUR','FKP','FJD','GHC','GIP','GTQ','GGP','GYD','HNL','HKD','HUF','ISK','INR','IDR','IRR','IMP','ILS',
+                     'JMD','JPY','JEP','KZT','KPW','KRW','KGS','LAK','LVL','LBP','LRD','LTL','MKD','MYR','MUR','MXN','MNT',
+                     'MZN','NAD','NPR','ANG','NZD','NIO','NGN','NOK','OMR','PKR','PAB','PYG','PEN','PHP','PLN','QAR','RON',
+                     'RUB','SHP','SAR','RSD','SCR','SGD','SBD','SOS','ZAR','LKR','SEK','CHF','SRD','SYP','TWD','THB','TTD',
+                     'TRY','TRL','TVD','UAH','GBP','USD','UYU','UZS','VEF','VND','YER','ZWD'];
+    
     /**
      * @var array<string, int|float|string>
      */
@@ -84,9 +92,12 @@ class SepaQrData
 
     public function setBic(string $bic): static
     {
-        if (strlen($bic) !== 8 && strlen($bic) !== 11) {
-            throw new InvalidArgumentException("Invalid BIC of the beneficiary: $bic. Should be either 8 or 11 characters.");
-        }
+        if (strlen($bic) > 0) {
+        
+            if (strlen($bic) !== 8 && strlen($bic) !== 11) {
+                throw new InvalidArgumentException("Invalid BIC of the beneficiary: $bic. Should be either 8 or 11 characters.");
+            }
+        }            
 
         $this->sepaValues['bic'] = $bic;
 
@@ -117,80 +128,142 @@ class SepaQrData
 
     public function setCurrency(string $currency): static
     {
-        if (strlen($currency) !== 3) {
-            throw new InvalidArgumentException("Invalid currency: $currency. Should be a valid 3 character ISO 4217 code.");
+        if (strlen($currency) > 0) {
+        
+            if (strlen($currency) !== 3) {
+                throw new InvalidArgumentException("Invalid currency: $currency. Should be a valid 3 character ISO 4217 code.");
+            }
+
+            if (!in_array($currency, $this->valt)) {
+                throw new InvalidArgumentException('The currency is not supported or no valid ISO 4217 code');
+            }
+
+            $this->sepaValues['currency'] = $currency;
+
+            return $this;
         }
 
-        $this->sepaValues['currency'] = $currency;
+        $this->sepaValues['currency'] = 'EUR';
 
-        return $this;
+        return $this;        
     }
 
     public function setAmount(float $amount): static
     {
-        if ($amount < 0.01) {
-            throw new InvalidArgumentException("Invalid amount: $amount. Should be minumum 0.01 Euro.");
-        }
+        //$amount = floatval($amount);
 
-        if ($amount > 999999999.99) {
-            throw new InvalidArgumentException("Invalid amount: $amount. Should be maximum 999999999.99 Euro.");
-        }
+        if (floatval($amount) > 0.00) {
 
-        $this->sepaValues['amount'] = $amount;
+            //if (($ramount = preg_replace("/^[0-9]+(\.[0-9]{0,5}|\,[0-9]{0,5})?$/", '', $amount) !== '')) {
+            if (($ramount = preg_replace("/^[0-9]+(\.[0-9]{0,5})?$/", '', strval($amount)) !== '')) {
+                throw new InvalidArgumentException('Amount of the credit transfer must be type of float');
+            }
+        
+            if ($amount < 0.01) {
+                throw new InvalidArgumentException("Invalid amount: $amount. Should be minumum 0.01 Euro.");
+            }
+
+            if ($amount > 999999999.99) {
+                throw new InvalidArgumentException("Invalid amount: $amount. Should be maximum 999999999.99 Euro.");
+            }
+
+            $this->sepaValues['amount'] = number_format($amount, 2, '.', '');
+            //$this->sepaValues['amount'] = $amount;
+
+            return $this;
+        }
+        
+        $this->sepaValues['amount'] = '';
 
         return $this;
     }
 
     public function setPurpose(string $purpose): static
     {
-        if (strlen($purpose) !== 4) {
-            throw new InvalidArgumentException("Invalid purpose code: $purpose. Should be 4 characters.");
+        if (strlen($purpose) > 0) {
+        
+            if (strlen($purpose) !== 4) {
+                throw new InvalidArgumentException("Invalid purpose code: $purpose. Should be 4 characters.");
+            }
+
+            if (($rpose = preg_replace("/[A-Z]{4}/", '', $purpose)) !== '') {
+                throw new InvalidArgumentException('Only 4 capital letters (A-Z) are allowed');
+            }
+            
+            $this->sepaValues['purpose'] = $purpose;
+
+            return $this;
         }
 
-        $this->sepaValues['purpose'] = $purpose;
+        $this->sepaValues['purpose'] = '';
 
         return $this;
     }
 
     public function setRemittanceReference(string $remittanceReference): static
     {
-        if (strlen($remittanceReference) > 35) {
-            throw new InvalidArgumentException("Invalid structured remittance information: $remittanceReference. Should be maximum 35 characters.");
+        if (strlen($remittanceReference) > 0) {
+        
+            if (strlen($remittanceReference) > 35) {
+                throw new InvalidArgumentException("Invalid structured remittance information: $remittanceReference. Should be maximum 35 characters.");
+            }
+
+            if (isset($this->sepaValues['remittanceText']) AND strlen($this->sepaValues['remittanceText']) > 0) {
+                throw new InvalidArgumentException("Invalid remittance information. Use either structured or unstructured remittance information, not both.");
+            }
+
+            if (($rReference = preg_replace("/[0-9a-zA-Z ':,.?-\\\+\\\(\\\)\\/]/", '', $remittanceReference)) !== '') {
+                throw new InvalidArgumentException('Only capital letters (A-Za-z), Numbers (0-9) and special characters (/?:\'().,+-space) are allowed');
+            }
+            
+            $this->sepaValues['remittanceReference'] = (string)$remittanceReference;
+
+            return $this;
         }
 
-        if (isset($this->sepaValues['remittanceText'])) {
-            throw new InvalidArgumentException("Invalid remittance information. Use either structured or unstructured remittance information, not both.");
-        }
-
-        $this->sepaValues['remittanceReference'] = (string)$remittanceReference;
+        $this->sepaValues['remittanceReference'] = '';
 
         return $this;
     }
 
     public function setRemittanceText(string $remittanceText): static
     {
-        if (strlen($remittanceText) > 140) {
-            throw new InvalidArgumentException("Invalid unstructured remittance information: $remittanceText. Should be maximum 140 characters.");
+        if (strlen($remittanceText) > 0) {
+        
+            if (strlen($remittanceText) > 140) {
+                throw new InvalidArgumentException("Invalid unstructured remittance information: $remittanceText. Should be maximum 140 characters.");
+            }
+
+            if (isset($this->sepaValues['remittanceReference']) AND strlen($this->sepaValues['remittanceReference']) > 0) {
+                throw new InvalidArgumentException("Invalid remittance information. Use either structured or unstructured remittance information, not both.");
+            }
+
+            $this->sepaValues['remittanceText'] = $remittanceText;
+
+            return $this;
         }
 
-        if (isset($this->sepaValues['remittanceReference'])) {
-            throw new InvalidArgumentException("Invalid remittance information. Use either structured or unstructured remittance information, not both.");
-        }
-
-        $this->sepaValues['remittanceText'] = $remittanceText;
+        $this->sepaValues['remittanceText'] = '';
 
         return $this;
     }
 
     public function setInformation(string $information): static
     {
-        if (strlen($information) > 70) {
-            throw new InvalidArgumentException("Invalid beneficiary to originator information: $information. Should be maximum 70 characters.");
+        if (strlen($information) > 0) {
+        
+            if (strlen($information) > 70) {
+                throw new InvalidArgumentException("Invalid beneficiary to originator information: $information. Should be maximum 70 characters.");
+            }
+
+            $this->sepaValues['information'] = $information;
+
+            return $this;
         }
 
-        $this->sepaValues['information'] = $information;
+        $this->sepaValues['information'] = '';
 
-        return $this;
+        return $this;       
     }
 
     public function __toString(): string
@@ -233,6 +306,7 @@ class SepaQrData
             $values['name'],
             $values['iban'],
             self::formatMoney($amount),
+            //self::formatMoney((string)$values['currency'], (float)$values['amount']),
             $values['purpose'],
             $values['remittanceReference'],
             $values['remittanceText'],
