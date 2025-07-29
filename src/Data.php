@@ -43,7 +43,7 @@ class Data
         return sprintf(
             '%s%s',
             strtoupper($currency),
-            $value > 0 ? number_format($value, 2, '.', '') : ''
+            $value > 0 ? number_format(floatval($value), 2, '.', '') : ''
         );
     }
 
