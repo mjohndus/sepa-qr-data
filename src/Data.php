@@ -156,7 +156,7 @@ class Data
 
     public function setAmount(string $amount): static
     {
-        $amount = floatval($amount);
+        //$amount = floatval($amount);
 
         if (floatval($amount) > 0.00) {
 
@@ -173,7 +173,7 @@ class Data
                 throw new Exception('Amount of the credit transfer cannot be higher than 999999999.99 Euro');
             }
 
-            $this->sepaValues['amount'] = number_format($amount, 2, '.', '');
+            $this->sepaValues['amount'] = number_format(floatval($amount), 2, '.', '');
 
             return $this;
         }
@@ -302,7 +302,7 @@ class Data
         }
 
         /** @var float */
-        $amount = $values['amount'];
+        //$amount = $values['amount'];
         
         return rtrim(implode("\n", array(
             $values['serviceTag'],
@@ -312,7 +312,7 @@ class Data
             $values['bic'],
             $values['name'],
             $values['iban'],
-            self::formatMoney((string)$values['currency'], (float)$values['amount']),
+            self::formatMoney((string)$values['currency'], (string)$values['amount']),
             //self::formatMoney($amount),
             $values['purpose'],
             $values['remittanceReference'],
